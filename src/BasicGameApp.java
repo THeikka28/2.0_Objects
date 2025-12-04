@@ -62,7 +62,11 @@ public class BasicGameApp implements Runnable {
    // This section is the setup portion of the program
    // Initialize your variables and construct your program objects here.
 	public BasicGameApp() {
-      
+
+        //setup for random variable
+        // first make int then do
+      int randx = (int)(Math.random() * 999)+1;
+      int randy = (int)(Math.random() * 699)+1;
       setUpGraphics();
        
       //variable and objects
@@ -71,6 +75,8 @@ public class BasicGameApp implements Runnable {
         gabepic = Toolkit.getDefaultToolkit().getImage("Gabe.png"); //load the picture
         gavinpic = Toolkit.getDefaultToolkit().getImage("Gavin.png"); //load the picture
         astro = new Astronaut(10,100);
+        astro.ypos = randy;
+        astro.xpos = randx;
         gabe = new Astronaut(10,100);
         Gavin = new Astronaut(179,10);
         Gavin.dx = 13;
@@ -109,10 +115,39 @@ public class BasicGameApp implements Runnable {
 
 	public void moveThings()
 	{
-      //calls the move( ) code in the objects
+        if (Gavin.ypos + Gavin.height > gabe.ypos  && gabe.ypos +gabe.height > Gavin.ypos && Gavin.xpos + Gavin.width > gabe.xpos && gabe.xpos + gabe.width > Gavin.xpos) {
+        gabe.dy = gabe.dy *-1;
+        gabe.dx = gabe.dx *-1;
+    }
+        if (Gavin.ypos + Gavin.height > gabe.ypos  && gabe.ypos +gabe.height > Gavin.ypos && Gavin.xpos + Gavin.width > gabe.xpos && gabe.xpos + gabe.width > Gavin.xpos) {
+        Gavin.dy = Gavin.dy *-1;
+        Gavin.dx = Gavin.dx *-1;
+    }
+        if (Gavin.ypos + Gavin.height > astro.ypos  && astro.ypos +astro.height > Gavin.ypos && Gavin.xpos + Gavin.width > astro.xpos && astro.xpos + astro.width > Gavin.xpos) {
+        astro.dy = astro.dy *-1;
+        astro.dx = astro.dx *-1;
+    }
+        if (Gavin.ypos + Gavin.height > astro.ypos  && astro.ypos +astro.height > Gavin.ypos && Gavin.xpos + Gavin.width > astro.xpos && astro.xpos + astro.width > Gavin.xpos) {
+        Gavin.dy = Gavin.dy *-1;
+        Gavin.dx = Gavin.dx *-1;
+    }
+        if (gabe.ypos + gabe.height > astro.ypos  && astro.ypos +astro.height > gabe.ypos && gabe.xpos + gabe.width > astro.xpos && astro.xpos + astro.width > gabe.xpos) {
+            gabe.dy = gabe.dy *-1;
+            gabe.dx = gabe.dx *-1;
+        }
+        if (gabe.ypos + gabe.height > astro.ypos  && astro.ypos +astro.height > gabe.ypos && gabe.xpos + gabe.width > astro.xpos && astro.xpos + astro.width > gabe.xpos) {
+            astro.dy = astro.dy *-1;
+            astro.dx = astro.dx *-1;
+        }
+
+
+
+        //calls the move( ) code in the objects
 		astro.move();
         Gavin.move();
         gabe.move();
+
+
 
 	}
 	
