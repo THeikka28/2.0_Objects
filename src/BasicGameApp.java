@@ -40,11 +40,13 @@ public class BasicGameApp implements Runnable {
 	public BufferStrategy bufferStrategy;
 	public Image astroPic;
     public Image gabepic;
+    public Image gavinpic;
 
    //Declare the objects used in the program
    //These are things that are made up of more than one variable type
 	private Astronaut astro;
     private Astronaut gabe;
+    private Astronaut Gavin;
 
 
    // Main method definition
@@ -67,8 +69,14 @@ public class BasicGameApp implements Runnable {
       //create (construct) the objects needed for the game and load up 
 		astroPic = Toolkit.getDefaultToolkit().getImage("Niam.png"); //load the picture
         gabepic = Toolkit.getDefaultToolkit().getImage("Gabe.png"); //load the picture
+        gavinpic = Toolkit.getDefaultToolkit().getImage("Gavin.png"); //load the picture
         astro = new Astronaut(10,100);
         gabe = new Astronaut(10,100);
+        Gavin = new Astronaut(179,10);
+        Gavin.dx = 13;
+        Gavin.dy = -13;
+        Gavin.width = 90;
+        Gavin.height = 95;
         gabe.width = 50;
         gabe.height = 75;
         gabe.ypos = 476;
@@ -103,6 +111,7 @@ public class BasicGameApp implements Runnable {
 	{
       //calls the move( ) code in the objects
 		astro.move();
+        Gavin.move();
         gabe.move();
 
 	}
@@ -157,6 +166,7 @@ public class BasicGameApp implements Runnable {
       //draw the image of the astronaut
 		g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
         g.drawImage(gabepic, gabe.xpos, gabe.ypos, gabe.width, gabe.height, null);
+        g.drawImage(gavinpic, Gavin.xpos, Gavin.ypos, Gavin.width, Gavin.height, null);
 //stop drawing things here
 		g.dispose();
 
