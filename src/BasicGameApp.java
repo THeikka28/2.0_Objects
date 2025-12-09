@@ -41,12 +41,17 @@ public class BasicGameApp implements Runnable {
 	public Image astroPic;
     public Image gabepic;
     public Image gavinpic;
+    public Image asteroidpic;
 
    //Declare the objects used in the program
    //These are things that are made up of more than one variable type
 	private Astronaut astro;
     private Astronaut gabe;
     private Astronaut Gavin;
+    private Asteroid asteroid1;
+    private Asteroid asteroid2;
+
+
 
 
    // Main method definition
@@ -63,10 +68,10 @@ public class BasicGameApp implements Runnable {
    // Initialize your variables and construct your program objects here.
 	public BasicGameApp() {
 
-        //setup for random variable
+        //setup for xom variable
         // first make int then do
-      int randx = (int)(Math.random() * 999)+1;
-      int randy = (int)(Math.random() * 699)+1;
+      int randx = (int)(Math.random() * 800)+100;
+      int randy = (int)(Math.random() * 500)+100;
       setUpGraphics();
        
       //variable and objects
@@ -74,19 +79,22 @@ public class BasicGameApp implements Runnable {
 		astroPic = Toolkit.getDefaultToolkit().getImage("Niam.png"); //load the picture
         gabepic = Toolkit.getDefaultToolkit().getImage("Gabe.png"); //load the picture
         gavinpic = Toolkit.getDefaultToolkit().getImage("Gavin.png"); //load the picture
+        asteroidpic = Toolkit.getDefaultToolkit().getImage("Asteroid.jpeg"); //load the picture
         astro = new Astronaut(10,100);
         astro.ypos = randy;
         astro.xpos = randx;
         gabe = new Astronaut(10,100);
         Gavin = new Astronaut(179,10);
+        asteroid1 = new Asteroid (randx,randy);
+        asteroid2 = new Asteroid(500,500);
         Gavin.dx = 13;
         Gavin.dy = -13;
-        Gavin.width = 90;
+        Gavin.width = 100;
         Gavin.height = 95;
-        gabe.width = 50;
-        gabe.height = 75;
-        gabe.ypos = 476;
-        gabe.xpos = 453;
+        gabe.width = 100;
+        gabe.height = 100;
+        gabe.ypos = randx;
+        gabe.xpos = randy;
         gabe.dx = -12;
         gabe.dy = 12;
 
@@ -123,7 +131,7 @@ public class BasicGameApp implements Runnable {
         Gavin.dy = Gavin.dy *-1;
         Gavin.dx = Gavin.dx *-1;
     }
-        if (Gavin.ypos + Gavin.height > astro.ypos  && astro.ypos +astro.height > Gavin.ypos && Gavin.xpos + Gavin.width > astro.xpos && astro.xpos + astro.width > Gavin.xpos) {
+    if (Gavin.ypos + Gavin.height > astro.ypos  && astro.ypos +astro.height > Gavin.ypos && Gavin.xpos + Gavin.width > astro.xpos && astro.xpos + astro.width > Gavin.xpos) {
         astro.dy = astro.dy *-1;
         astro.dx = astro.dx *-1;
     }
@@ -141,11 +149,46 @@ public class BasicGameApp implements Runnable {
         }
 
 
+        if (asteroid1.xpos > astro.xpos && asteroid1.xpos < astro.xpos + astro.width && asteroid1.ypos > astro.ypos && asteroid1.ypos < astro.ypos + astro.height)
+        {
+            astro.isAlive = false;
+        }
+        if (asteroid1.xpos > gabe.xpos && asteroid1.xpos < gabe.xpos + gabe.width && asteroid1.ypos > gabe.ypos && asteroid1.ypos < gabe.ypos + gabe.height)
+        {
+            gabe.isAlive = false;
+        }
+        if (asteroid1.xpos > Gavin.xpos && asteroid1.xpos < Gavin.xpos + Gavin.width && asteroid1.ypos > Gavin.ypos && asteroid1.ypos < Gavin.ypos + Gavin.height)
+    {
+        Gavin.isAlive = false;
+    }
+        if (asteroid2.xpos > astro.xpos && asteroid2.xpos < astro.xpos + astro.width && asteroid2.ypos > astro.ypos && asteroid2.ypos < astro.ypos + astro.height)
+        {
+            astro.isAlive = false;
+        }
+        if (asteroid2.xpos > gabe.xpos && asteroid2.xpos < gabe.xpos + gabe.width && asteroid2.ypos > gabe.ypos && asteroid2.ypos < gabe.ypos + gabe.height)
+        {
+            gabe.isAlive = false;
+        }
+        if (asteroid2.xpos > Gavin.xpos && asteroid2.xpos < Gavin.xpos + Gavin.width && asteroid2.ypos > Gavin.ypos && asteroid2.ypos < Gavin.ypos + Gavin.height)
+        {
+            Gavin.isAlive = false;
+        }
 
         //calls the move( ) code in the objects
-		astro.move();
-        Gavin.move();
-        gabe.move();
+
+        if (astro.isAlive == true)
+        {astro.move();}
+        else {astroPic = Toolkit.getDefaultToolkit().getImage("Grave.jpeg");}
+        if (gabe.isAlive == true)
+        {gabe.move();}
+        else {gabepic = Toolkit.getDefaultToolkit().getImage("Grave.jpeg");}
+        if (Gavin.isAlive == true)
+        {Gavin.move();}
+        else {gavinpic = Toolkit.getDefaultToolkit().getImage("Grave.jpeg");}
+
+        asteroid1.move();
+        asteroid2.move();
+
 
 
 
@@ -202,6 +245,9 @@ public class BasicGameApp implements Runnable {
 		g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
         g.drawImage(gabepic, gabe.xpos, gabe.ypos, gabe.width, gabe.height, null);
         g.drawImage(gavinpic, Gavin.xpos, Gavin.ypos, Gavin.width, Gavin.height, null);
+        g.drawImage(asteroidpic, asteroid1.xpos, asteroid1.ypos, asteroid1.width, asteroid1.height, null);
+        g.drawImage(asteroidpic, asteroid2.xpos, asteroid2.ypos, asteroid2.width, asteroid2.height, null);
+
 //stop drawing things here
 		g.dispose();
 
