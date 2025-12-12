@@ -1,3 +1,5 @@
+import java.awt.*;
+
 public class Asteroid {
     //VARIABLE DECLARATION SECTION
     //Here's where you state which variables you are going to use.
@@ -13,6 +15,8 @@ public class Asteroid {
     public int width;
     public int height;
     public boolean isAlive;//a boolean to denote if the hero is alive or dead.
+    public Rectangle hitbox;
+
 
 
     // METHOD DEFINITION SECTION
@@ -32,6 +36,7 @@ public class Asteroid {
         width = 50;
         height = 50;
         isAlive = true;
+        hitbox = new Rectangle (xpos, ypos, width, height);
 
     } // constructor
 
@@ -53,6 +58,7 @@ public class Asteroid {
         if (ypos < 0){ ypos = 700;
 
         }
+        hitbox = new Rectangle(xpos, ypos, width, height);
 
 
     }

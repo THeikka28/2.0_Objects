@@ -86,7 +86,7 @@ public class BasicGameApp implements Runnable {
         gabe = new Astronaut(10,100);
         Gavin = new Astronaut(179,10);
         asteroid1 = new Asteroid (randx,randy);
-        asteroid2 = new Asteroid(500,500);
+        asteroid2 = new Asteroid(randx/4, randy);
         Gavin.dx = 13;
         Gavin.dy = -13;
         Gavin.width = 100;
@@ -123,7 +123,7 @@ public class BasicGameApp implements Runnable {
 
 	public void moveThings()
 	{
-        if (Gavin.ypos + Gavin.height > gabe.ypos  && gabe.ypos +gabe.height > Gavin.ypos && Gavin.xpos + Gavin.width > gabe.xpos && gabe.xpos + gabe.width > Gavin.xpos) {
+     /*   if (Gavin.ypos + Gavin.height > gabe.ypos  && gabe.ypos +gabe.height > Gavin.ypos && Gavin.xpos + Gavin.width > gabe.xpos && gabe.xpos + gabe.width > Gavin.xpos) {
         gabe.dy = gabe.dy *-1;
         gabe.dx = gabe.dx *-1;
     }
@@ -148,8 +148,10 @@ public class BasicGameApp implements Runnable {
             astro.dx = astro.dx *-1;
         }
 
+      */
 
-        if (asteroid1.xpos > astro.xpos && asteroid1.xpos < astro.xpos + astro.width && asteroid1.ypos > astro.ypos && asteroid1.ypos < astro.ypos + astro.height)
+
+     /*   if (asteroid1.xpos > astro.xpos && asteroid1.xpos < astro.xpos + astro.width && asteroid1.ypos > astro.ypos && asteroid1.ypos < astro.ypos + astro.height)
         {
             astro.isAlive = false;
         }
@@ -174,8 +176,10 @@ public class BasicGameApp implements Runnable {
             Gavin.isAlive = false;
         }
 
-        //calls the move( ) code in the objects
+      */
 
+        //calls the move( ) code in the objects
+    crashing();
         if (astro.isAlive == true)
         {astro.move();}
         else {astroPic = Toolkit.getDefaultToolkit().getImage("Grave.jpeg");}
@@ -190,9 +194,38 @@ public class BasicGameApp implements Runnable {
         asteroid2.move();
 
 
-
-
 	}
+    public void crashing()
+    {
+        //check to see if any astronauts crash into each other
+        if (astro.hitbox.intersects(gabe.hitbox)){
+            astro.dx = -astro.dx;
+            astro.dy = -astro.dy;
+            gabe.dx = -gabe.dx;
+            gabe.dy = -gabe.dy;
+        }
+        if (Gavin.hitbox.intersects(gabe.hitbox)){
+            Gavin.dx = -Gavin.dx;
+            Gavin.dy = -Gavin.dy;
+            gabe.dx = -gabe.dx;
+            gabe.dy = -gabe.dy;
+        }
+        if (Gavin.hitbox.intersects(gabe.hitbox)){
+            Gavin.dx = -Gavin.dx;
+            Gavin.dy = -Gavin.dy;
+            astro.dx = -astro.dx;
+            astro.dy = -astro.dy;
+        }
+        if (asteroid1.hitbox.intersects(Gavin.hitbox)){
+            Gavin.isAlive = false;
+    }
+        if (asteroid1.hitbox.intersects(astro.hitbox)){
+        astro.isAlive = false;
+    }
+        if (asteroid1.hitbox.intersects(gabe.hitbox)){
+        gabe.isAlive = false;
+    }
+    }
 	
    //Pauses or sleeps the computer for the amount specified in milliseconds
    public void pause(int time ){
@@ -247,6 +280,9 @@ public class BasicGameApp implements Runnable {
         g.drawImage(gavinpic, Gavin.xpos, Gavin.ypos, Gavin.width, Gavin.height, null);
         g.drawImage(asteroidpic, asteroid1.xpos, asteroid1.ypos, asteroid1.width, asteroid1.height, null);
         g.drawImage(asteroidpic, asteroid2.xpos, asteroid2.ypos, asteroid2.width, asteroid2.height, null);
+        g.drawRect(astro.hitbox.x, astro.hitbox.y, astro.hitbox.width, astro.hitbox.height);
+        g.drawRect(gabe.hitbox.x, gabe.hitbox.y, gabe.hitbox.width, gabe.hitbox.height);
+        g.drawRect(Gavin.hitbox.x, Gavin.hitbox.y, Gavin.hitbox.width, Gavin.hitbox.height);
 
 //stop drawing things here
 		g.dispose();
