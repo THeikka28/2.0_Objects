@@ -42,6 +42,7 @@ public class BasicGameApp implements Runnable {
     public Image gabepic;
     public Image gavinpic;
     public Image asteroidpic;
+    public Image backgroundpic;
 
    //Declare the objects used in the program
    //These are things that are made up of more than one variable type
@@ -72,6 +73,10 @@ public class BasicGameApp implements Runnable {
         // first make int then do
       int randx = (int)(Math.random() * 400)+100;
       int randy = (int)(Math.random() * 300)+100;
+        int randx2 = (int)(Math.random() * 400)+100;
+        int randy2 = (int)(Math.random() * 300)+100;
+        int randx3 = (int)(Math.random() * 400)+100;
+        int randy3 = (int)(Math.random() * 300)+100;
       setUpGraphics();
        
       //variable and objects
@@ -79,25 +84,23 @@ public class BasicGameApp implements Runnable {
 		astroPic = Toolkit.getDefaultToolkit().getImage("Niam.png"); //load the picture
         gabepic = Toolkit.getDefaultToolkit().getImage("Gabe.png"); //load the picture
         gavinpic = Toolkit.getDefaultToolkit().getImage("Gavin.png"); //load the picture
-        asteroidpic = Toolkit.getDefaultToolkit().getImage("Asteroid.jpeg"); //load the picture
-        astro = new Astronaut(10,100);
+        asteroidpic = Toolkit.getDefaultToolkit().getImage("Asteroid.png"); //load the picture
+        backgroundpic = Toolkit.getDefaultToolkit().getImage("catbackground.jpeg"); //load the picture
+
+        astro = new Astronaut(randx3,randy3);
         astro.ypos = 400;
         astro.xpos = 220;
-        gabe = new Astronaut(10,100);
-        Gavin = new Astronaut(500,200);
-        asteroid1 = new Asteroid (800,randy);
-        asteroid2 = new Asteroid(400, randy);
-        asteroid2.dx  = 12;
-        Gavin.dx = 13;
-        Gavin.dy = -13;
+        gabe = new Astronaut(randx,randy);
+        Gavin = new Astronaut(randx2,randy2);
+        asteroid1 = new Asteroid (0,randy);
+        asteroid2 = new Asteroid(1000, randy);
+        asteroid2.dx  = 3;
+        Gavin.dx = 3;
+        Gavin.dy = -4;
         Gavin.width = 100;
         Gavin.height = 95;
         gabe.width = 100;
         gabe.height = 100;
-        gabe.ypos = randx;
-        gabe.xpos = randy;
-        gabe.dx = -12;
-        gabe.dy = 12;
 
 
 	}// BasicGameApp()
@@ -124,99 +127,61 @@ public class BasicGameApp implements Runnable {
 
 	public void moveThings()
 	{
-     /*   if (Gavin.ypos + Gavin.height > gabe.ypos  && gabe.ypos +gabe.height > Gavin.ypos && Gavin.xpos + Gavin.width > gabe.xpos && gabe.xpos + gabe.width > Gavin.xpos) {
-        gabe.dy = gabe.dy *-1;
-        gabe.dx = gabe.dx *-1;
-    }
-        if (Gavin.ypos + Gavin.height > gabe.ypos  && gabe.ypos +gabe.height > Gavin.ypos && Gavin.xpos + Gavin.width > gabe.xpos && gabe.xpos + gabe.width > Gavin.xpos) {
-        Gavin.dy = Gavin.dy *-1;
-        Gavin.dx = Gavin.dx *-1;
-    }
-    if (Gavin.ypos + Gavin.height > astro.ypos  && astro.ypos +astro.height > Gavin.ypos && Gavin.xpos + Gavin.width > astro.xpos && astro.xpos + astro.width > Gavin.xpos) {
-        astro.dy = astro.dy *-1;
-        astro.dx = astro.dx *-1;
-    }
-        if (Gavin.ypos + Gavin.height > astro.ypos  && astro.ypos +astro.height > Gavin.ypos && Gavin.xpos + Gavin.width > astro.xpos && astro.xpos + astro.width > Gavin.xpos) {
-        Gavin.dy = Gavin.dy *-1;
-        Gavin.dx = Gavin.dx *-1;
-    }
-        if (gabe.ypos + gabe.height > astro.ypos  && astro.ypos +astro.height > gabe.ypos && gabe.xpos + gabe.width > astro.xpos && astro.xpos + astro.width > gabe.xpos) {
-            gabe.dy = gabe.dy *-1;
-            gabe.dx = gabe.dx *-1;
-        }
-        if (gabe.ypos + gabe.height > astro.ypos  && astro.ypos +astro.height > gabe.ypos && gabe.xpos + gabe.width > astro.xpos && astro.xpos + astro.width > gabe.xpos) {
-            astro.dy = astro.dy *-1;
-            astro.dx = astro.dx *-1;
-        }
-
-      */
-
-
-     /*   if (asteroid1.xpos > astro.xpos && asteroid1.xpos < astro.xpos + astro.width && asteroid1.ypos > astro.ypos && asteroid1.ypos < astro.ypos + astro.height)
-        {
-            astro.isAlive = false;
-        }
-        if (asteroid1.xpos > gabe.xpos && asteroid1.xpos < gabe.xpos + gabe.width && asteroid1.ypos > gabe.ypos && asteroid1.ypos < gabe.ypos + gabe.height)
-        {
-            gabe.isAlive = false;
-        }
-        if (asteroid1.xpos > Gavin.xpos && asteroid1.xpos < Gavin.xpos + Gavin.width && asteroid1.ypos > Gavin.ypos && asteroid1.ypos < Gavin.ypos + Gavin.height)
-    {
-        Gavin.isAlive = false;
-    }
-        if (asteroid2.xpos > astro.xpos && asteroid2.xpos < astro.xpos + astro.width && asteroid2.ypos > astro.ypos && asteroid2.ypos < astro.ypos + astro.height)
-        {
-            astro.isAlive = false;
-        }
-        if (asteroid2.xpos > gabe.xpos && asteroid2.xpos < gabe.xpos + gabe.width && asteroid2.ypos > gabe.ypos && asteroid2.ypos < gabe.ypos + gabe.height)
-        {
-            gabe.isAlive = false;
-        }
-        if (asteroid2.xpos > Gavin.xpos && asteroid2.xpos < Gavin.xpos + Gavin.width && asteroid2.ypos > Gavin.ypos && asteroid2.ypos < Gavin.ypos + Gavin.height)
-        {
-            Gavin.isAlive = false;
-        }
-
-      */
-
         //calls the move( ) code in the objects
-    crashing();
+
         if (astro.isAlive == true)
         {astro.move();}
-        else {astroPic = Toolkit.getDefaultToolkit().getImage("Grave.jpeg");}
+        else {astroPic = Toolkit.getDefaultToolkit().getImage("Grave.png");}
         if (gabe.isAlive == true)
         {gabe.move();}
-        else {gabepic = Toolkit.getDefaultToolkit().getImage("Grave.jpeg");}
+        else {gabepic = Toolkit.getDefaultToolkit().getImage("Grave.png");}
         if (Gavin.isAlive == true)
         {Gavin.move();}
-        else {gavinpic = Toolkit.getDefaultToolkit().getImage("Grave.jpeg");}
+        else {gavinpic = Toolkit.getDefaultToolkit().getImage("Grave.png");}
 
         asteroid1.move();
         asteroid2.move();
-
+        crashing();
 
 	}
     public void crashing()
     {
         //check to see if any astronauts crash into each other
-        if (astro.hitbox.intersects(gabe.hitbox)){
+        if (astro.hitbox.intersects(gabe.hitbox) && astro.isCrashing == false){
             astro.dx = -astro.dx;
             astro.dy = -astro.dy;
             gabe.dx = -gabe.dx;
             gabe.dy = -gabe.dy;
+            astro.isCrashing = true;
         }
-        if (Gavin.hitbox.intersects(gabe.hitbox)){
+        if (Gavin.hitbox.intersects(gabe.hitbox) && Gavin.isCrashing == false){
             Gavin.dx = -Gavin.dx;
             Gavin.dy = -Gavin.dy;
             gabe.dx = -gabe.dx;
             gabe.dy = -gabe.dy;
+            Gavin.isCrashing = true;
         }
-        if (Gavin.hitbox.intersects(gabe.hitbox)){
+        if (Gavin.hitbox.intersects(astro.hitbox) && Gavin.isCrashing == false){
             Gavin.dx = -Gavin.dx;
             Gavin.dy = -Gavin.dy;
             astro.dx = -astro.dx;
             astro.dy = -astro.dy;
+        Gavin.isCrashing = true;
         }
+
+        if (!Gavin.hitbox.intersects(astro.hitbox) && !Gavin.hitbox.intersects(gabe.hitbox)){
+        Gavin.isCrashing = false;
+        }
+        if (!astro.hitbox.intersects(Gavin.hitbox) && !astro.hitbox.intersects(gabe.hitbox)){
+            astro.isCrashing = false;
+        }
+        if (!gabe.hitbox.intersects(astro.hitbox) && !gabe.hitbox.intersects(Gavin.hitbox)){
+            gabe.isCrashing = false;
+        }
+
+
+
+
         if (asteroid1.hitbox.intersects(Gavin.hitbox)){
             Gavin.isAlive = false;
     }
@@ -225,25 +190,33 @@ public class BasicGameApp implements Runnable {
     }
         if (asteroid1.hitbox.intersects(gabe.hitbox)){
         gabe.isAlive = false;
+
     }
         if (asteroid2.hitbox.intersects(Gavin.hitbox)){
             Gavin.isAlive = false;
+            System.out.println("ripGavin");
         }
         if (asteroid2.hitbox.intersects(astro.hitbox)){
             astro.isAlive = false;
+            System.out.println("RipNiam");
         }
         if (asteroid2.hitbox.intersects(gabe.hitbox)){
             gabe.isAlive = false;
+            System.out.println("ripgabe");
         }
-        if (asteroid2.hitbox.intersects(asteroid1.hitbox)){
-            asteroid2.height = asteroid2.height - 15;
-            asteroid2.width = asteroid2.width - 15;
-            asteroid1.height = asteroid1.height - 15;
-            asteroid1.width = asteroid1.width - 15;
+        if (asteroid2.hitbox.intersects(asteroid1.hitbox) && asteroid1.isCrashing ==false){
+            asteroid2.height += 15;
+            asteroid2.width += 15;
+            asteroid1.height += 15;
+            asteroid1.width += 15;
             asteroid1.dx = -asteroid1.dx;
             asteroid1.dy = -asteroid1.dy;
-
-
+            asteroid2.dx = -asteroid2.dx;
+            asteroid2.dy = -asteroid2.dy;
+            asteroid1.isCrashing = true;
+        }
+        if (!asteroid2.hitbox.intersects(asteroid1.hitbox)){
+            asteroid1.isCrashing = false;
         }
     }
 	
@@ -295,6 +268,7 @@ public class BasicGameApp implements Runnable {
         //start drawing things here
 
       //draw the image of the astronaut
+        g.drawImage(backgroundpic, 0, 0, 1000, 700, null);
 		g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
         g.drawImage(gabepic, gabe.xpos, gabe.ypos, gabe.width, gabe.height, null);
         g.drawImage(gavinpic, Gavin.xpos, Gavin.ypos, Gavin.width, Gavin.height, null);
