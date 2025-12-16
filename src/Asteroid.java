@@ -33,8 +33,8 @@ public class Asteroid {
         dx =-10;
         dy = -10;
 
-        width = 50;
-        height = 50;
+        width = 100;
+        height = 100;
         isAlive = true;
         hitbox = new Rectangle (xpos, ypos, width, height);
 

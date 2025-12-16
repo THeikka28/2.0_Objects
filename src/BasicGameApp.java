@@ -70,8 +70,8 @@ public class BasicGameApp implements Runnable {
 
         //setup for xom variable
         // first make int then do
-      int randx = (int)(Math.random() * 800)+100;
-      int randy = (int)(Math.random() * 500)+100;
+      int randx = (int)(Math.random() * 400)+100;
+      int randy = (int)(Math.random() * 300)+100;
       setUpGraphics();
        
       //variable and objects
@@ -81,12 +81,13 @@ public class BasicGameApp implements Runnable {
         gavinpic = Toolkit.getDefaultToolkit().getImage("Gavin.png"); //load the picture
         asteroidpic = Toolkit.getDefaultToolkit().getImage("Asteroid.jpeg"); //load the picture
         astro = new Astronaut(10,100);
-        astro.ypos = randy;
-        astro.xpos = randx;
+        astro.ypos = 400;
+        astro.xpos = 220;
         gabe = new Astronaut(10,100);
-        Gavin = new Astronaut(179,10);
-        asteroid1 = new Asteroid (randx,randy);
-        asteroid2 = new Asteroid(randx/4, randy);
+        Gavin = new Astronaut(500,200);
+        asteroid1 = new Asteroid (800,randy);
+        asteroid2 = new Asteroid(400, randy);
+        asteroid2.dx  = 12;
         Gavin.dx = 13;
         Gavin.dy = -13;
         Gavin.width = 100;
@@ -225,6 +226,25 @@ public class BasicGameApp implements Runnable {
         if (asteroid1.hitbox.intersects(gabe.hitbox)){
         gabe.isAlive = false;
     }
+        if (asteroid2.hitbox.intersects(Gavin.hitbox)){
+            Gavin.isAlive = false;
+        }
+        if (asteroid2.hitbox.intersects(astro.hitbox)){
+            astro.isAlive = false;
+        }
+        if (asteroid2.hitbox.intersects(gabe.hitbox)){
+            gabe.isAlive = false;
+        }
+        if (asteroid2.hitbox.intersects(asteroid1.hitbox)){
+            asteroid2.height = asteroid2.height - 15;
+            asteroid2.width = asteroid2.width - 15;
+            asteroid1.height = asteroid1.height - 15;
+            asteroid1.width = asteroid1.width - 15;
+            asteroid1.dx = -asteroid1.dx;
+            asteroid1.dy = -asteroid1.dy;
+
+
+        }
     }
 	
    //Pauses or sleeps the computer for the amount specified in milliseconds
@@ -280,9 +300,7 @@ public class BasicGameApp implements Runnable {
         g.drawImage(gavinpic, Gavin.xpos, Gavin.ypos, Gavin.width, Gavin.height, null);
         g.drawImage(asteroidpic, asteroid1.xpos, asteroid1.ypos, asteroid1.width, asteroid1.height, null);
         g.drawImage(asteroidpic, asteroid2.xpos, asteroid2.ypos, asteroid2.width, asteroid2.height, null);
-        g.drawRect(astro.hitbox.x, astro.hitbox.y, astro.hitbox.width, astro.hitbox.height);
-        g.drawRect(gabe.hitbox.x, gabe.hitbox.y, gabe.hitbox.width, gabe.hitbox.height);
-        g.drawRect(Gavin.hitbox.x, Gavin.hitbox.y, Gavin.hitbox.width, Gavin.hitbox.height);
+
 
 //stop drawing things here
 		g.dispose();
