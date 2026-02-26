@@ -1,11 +1,3 @@
-//Basic Game Application
-//Version 2
-// Basic Object, Image, Movement
-// Astronaut moves to the right.
-// Threaded
-
-//K. Chun 8/2018
-
 //*******************************************************************************
 //Import Section
 //Add Java libraries needed for the game
@@ -13,16 +5,21 @@
 
 //Graphics Libraries
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
+//step 1 implement keylistener
+
+
 //*******************************************************************************
 // Class Definition Section
 
-public class BasicGameApp implements Runnable {
+public class BasicGameApp implements Runnable, KeyListener {
 
    //Variable Definition Section
    //Declare the variables used in the program 
@@ -90,13 +87,14 @@ public class BasicGameApp implements Runnable {
         astro = new Astronaut(randx3,randy3);
         astro.ypos = 400;
         astro.xpos = 220;
+
         gabe = new Astronaut(randx,randy);
         Gavin = new Astronaut(randx2,randy2);
-        asteroid1 = new Asteroid (0,randy);
-        asteroid2 = new Asteroid(1000, randy);
+        asteroid1 = new Asteroid ((int)(Math.random()*1000),randy);
+        asteroid2 = new Asteroid((int)(Math.random()*1000), randy);
         asteroid2.dx  = 3;
-        Gavin.dx = 3;
-        Gavin.dy = -4;
+        Gavin.dx = 5;
+        Gavin.dy = -5;
         Gavin.width = 100;
         Gavin.height = 95;
         gabe.width = 100;
@@ -194,15 +192,12 @@ public class BasicGameApp implements Runnable {
     }
         if (asteroid2.hitbox.intersects(Gavin.hitbox)){
             Gavin.isAlive = false;
-            System.out.println("ripGavin");
         }
         if (asteroid2.hitbox.intersects(astro.hitbox)){
             astro.isAlive = false;
-            System.out.println("RipNiam");
         }
         if (asteroid2.hitbox.intersects(gabe.hitbox)){
             gabe.isAlive = false;
-            System.out.println("ripgabe");
         }
         if (asteroid2.hitbox.intersects(asteroid1.hitbox) && asteroid1.isCrashing ==false){
             asteroid2.height += 15;
@@ -240,7 +235,12 @@ public class BasicGameApp implements Runnable {
    
       // creates a canvas which is a blank rectangular area of the screen onto which the application can draw
       // and trap input events (Mouse and Keyboard events)
-      canvas = new Canvas();  
+      canvas = new Canvas();
+
+
+      //step 2: set canvas as the keylistener
+       canvas.addKeyListener(this);
+
       canvas.setBounds(0, 0, WIDTH, HEIGHT);
       canvas.setIgnoreRepaint(true);
    
@@ -281,4 +281,64 @@ public class BasicGameApp implements Runnable {
 
 		bufferStrategy.show();
 	}
+
+
+    //step 3: add keylistener methods
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println("keypressed" + e.getKeyCode());
+        if (e.getKeyCode() == 87)
+        {
+            astro.ypos = astro.ypos-20;
+        }
+
+        if (e.getKeyCode() == 83)
+        {
+            astro.ypos = astro.ypos+20;
+        }
+
+        if (e.getKeyCode() == 65)
+        {
+            astro.xpos = astro.xpos-20;
+        }
+
+        if (e.getKeyCode() == 68)
+        {
+            astro.xpos = astro.xpos+20;
+        }
+
+        if (e.getKeyCode() == 73)
+        {
+            Gavin.dy = -Math.abs(Gavin.dy);
+        }
+        if (e.getKeyCode() == 74)
+        {
+            Gavin.dx = -Math.abs(Gavin.dx);
+        }
+        if (e.getKeyCode() == 75)
+        {
+            Gavin.dy = Math.abs(Gavin.dy);
+        }
+        if (e.getKeyCode() == 76)
+        {
+            Gavin.dx = Math.abs(Gavin.dx);
+        }
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+
+
 }
