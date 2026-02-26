@@ -7,6 +7,8 @@
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
@@ -19,7 +21,7 @@ import javax.swing.JPanel;
 //*******************************************************************************
 // Class Definition Section
 
-public class BasicGameApp implements Runnable, KeyListener {
+public class BasicGameApp implements Runnable, KeyListener, MouseListener{
 
    //Variable Definition Section
    //Declare the variables used in the program 
@@ -29,10 +31,13 @@ public class BasicGameApp implements Runnable, KeyListener {
 	final int WIDTH = 1000;
 	final int HEIGHT = 700;
 
+
+
    //Declare the variables needed for the graphics
 	public JFrame frame;
 	public Canvas canvas;
    public JPanel panel;
+   public long millitime;
    
 	public BufferStrategy bufferStrategy;
 	public Image astroPic;
@@ -48,6 +53,9 @@ public class BasicGameApp implements Runnable, KeyListener {
     private Astronaut Gavin;
     private Asteroid asteroid1;
     private Asteroid asteroid2;
+    private boolean up, down, left, right;
+    public int speed;
+
 
 
 
@@ -74,6 +82,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         int randy2 = (int)(Math.random() * 300)+100;
         int randx3 = (int)(Math.random() * 400)+100;
         int randy3 = (int)(Math.random() * 300)+100;
+
       setUpGraphics();
        
       //variable and objects
@@ -87,6 +96,9 @@ public class BasicGameApp implements Runnable, KeyListener {
         astro = new Astronaut(randx3,randy3);
         astro.ypos = 400;
         astro.xpos = 220;
+        speed = 5;
+        astro.dx = 0;
+        astro.dy = 0;
 
         gabe = new Astronaut(randx,randy);
         Gavin = new Astronaut(randx2,randy2);
@@ -135,6 +147,22 @@ public class BasicGameApp implements Runnable, KeyListener {
         else {gabepic = Toolkit.getDefaultToolkit().getImage("Grave.png");}
         if (Gavin.isAlive == true)
         {Gavin.move();}
+
+            if (up == true) {
+                astro.ypos -= speed;
+            }
+            if (down == true) {
+                astro.ypos = astro.ypos + speed;
+                System.out.println("down");
+            }
+            if (left == true) {
+                astro.xpos = astro.xpos - speed;
+                System.out.println("left");
+            }
+            if (right == true) {
+                astro.xpos += speed;
+            }
+
         else {gavinpic = Toolkit.getDefaultToolkit().getImage("Grave.png");}
 
         asteroid1.move();
@@ -227,15 +255,15 @@ public class BasicGameApp implements Runnable, KeyListener {
 
    //Graphics setup method
    private void setUpGraphics() {
-      frame = new JFrame("Application Template");   //Create the program window or frame.  Names it.
-   
+       canvas = new Canvas();
+       frame = new JFrame("Application Template");   //Create the program window or frame.  Names it.
+      canvas.addMouseListener(this);
       panel = (JPanel) frame.getContentPane();  //sets up a JPanel which is what goes in the frame
       panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));  //sizes the JPanel
       panel.setLayout(null);   //set the layout
    
       // creates a canvas which is a blank rectangular area of the screen onto which the application can draw
       // and trap input events (Mouse and Keyboard events)
-      canvas = new Canvas();
 
 
       //step 2: set canvas as the keylistener
@@ -287,33 +315,27 @@ public class BasicGameApp implements Runnable, KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
 
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("keypressed" + e.getKeyCode());
-        if (e.getKeyCode() == 87)
-        {
-            astro.ypos = astro.ypos-20;
+        System.out.println(e.getKeyCode());
+        if (e.getKeyCode() == 87) {
+            up = true;
+        }
+        if (e.getKeyCode() == 83) {
+            down = true;
+        }
+        if (e.getKeyCode() == 65) {
+            left = true;
+        }
+        if (e.getKeyCode() == 68) {
+            right = true;
         }
 
-        if (e.getKeyCode() == 83)
-        {
-            astro.ypos = astro.ypos+20;
-        }
 
-        if (e.getKeyCode() == 65)
-        {
-            astro.xpos = astro.xpos-20;
-        }
-
-        if (e.getKeyCode() == 68)
-        {
-            astro.xpos = astro.xpos+20;
-        }
 
         if (e.getKeyCode() == 73)
         {
@@ -335,10 +357,49 @@ public class BasicGameApp implements Runnable, KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e)
+    {
+        if (e.getKeyCode() == 87) {
+            up = false;
+        }
+        if (e.getKeyCode() == 83) {
+            down = false;
+        }
+        if (e.getKeyCode() == 65) {
+            left = false;
+        }
+        if (e.getKeyCode() == 68) {
+            right = false;
+        }
+    }
+
+//step three implement
+    @Override
+    public void mouseClicked(MouseEvent e) {
 
     }
 
+    @Override
+    public void mousePressed(MouseEvent e) {
+    e.getPoint();
+    Gavin.xpos = e.getX();
+    Gavin.ypos = e.getY();
+    millitime = System.currentTimeMillis();
+    }
 
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    if(System.currentTimeMillis()-millitime > 5000)
+    {}
+    }
 
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
 }
