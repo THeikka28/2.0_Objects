@@ -38,6 +38,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
 	public Canvas canvas;
    public JPanel panel;
    public long millitime;
+   public long startmillitime;
+   public Rectangle bubble;
    
 	public BufferStrategy bufferStrategy;
 	public Image astroPic;
@@ -45,6 +47,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
     public Image gavinpic;
     public Image asteroidpic;
     public Image backgroundpic;
+    public Image shield;
+    public long explosion;
 
    //Declare the objects used in the program
    //These are things that are made up of more than one variable type
@@ -55,6 +59,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
     private Asteroid asteroid2;
     private boolean up, down, left, right;
     public int speed;
+
 
 
 
@@ -92,6 +97,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
         gavinpic = Toolkit.getDefaultToolkit().getImage("Gavin.png"); //load the picture
         asteroidpic = Toolkit.getDefaultToolkit().getImage("Asteroid.png"); //load the picture
         backgroundpic = Toolkit.getDefaultToolkit().getImage("catbackground.jpeg"); //load the picture
+        shield = Toolkit.getDefaultToolkit().getImage("Shield.png"); //load the picture
+
 
         astro = new Astronaut(randx3,randy3);
         astro.ypos = 400;
@@ -111,6 +118,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
         Gavin.height = 95;
         gabe.width = 100;
         gabe.height = 100;
+        bubble = new Rectangle(-2000,1000, 10,10);
 
 
 	}// BasicGameApp()
@@ -180,6 +188,22 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
             gabe.dy = -gabe.dy;
             astro.isCrashing = true;
         }
+
+        if (asteroid1.hitbox.intersects(bubble) && asteroid1.isCrashing == false){
+            asteroid1.dx = -asteroid1.dx;
+            asteroid1.dy = -asteroid1.dy;
+            gabe.dx = -gabe.dx;
+            gabe.dy = -gabe.dy;
+            asteroid1.isCrashing = true;
+        }
+        if (asteroid2.hitbox.intersects(bubble) && asteroid2.isCrashing == false){
+            asteroid2.dx = -asteroid2.dx;
+            asteroid2.dy = -asteroid2.dy;
+            gabe.dx = -gabe.dx;
+            gabe.dy = -gabe.dy;
+            asteroid2.isCrashing = true;
+        }
+
         if (Gavin.hitbox.intersects(gabe.hitbox) && Gavin.isCrashing == false){
             Gavin.dx = -Gavin.dx;
             Gavin.dy = -Gavin.dy;
@@ -194,6 +218,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
             astro.dy = -astro.dy;
         Gavin.isCrashing = true;
         }
+
 
         if (!Gavin.hitbox.intersects(astro.hitbox) && !Gavin.hitbox.intersects(gabe.hitbox)){
         Gavin.isCrashing = false;
@@ -238,9 +263,13 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
             asteroid2.dy = -asteroid2.dy;
             asteroid1.isCrashing = true;
         }
-        if (!asteroid2.hitbox.intersects(asteroid1.hitbox)){
+        if (!asteroid2.hitbox.intersects(asteroid1.hitbox) && !asteroid2.hitbox.intersects(bubble)){
+            asteroid2.isCrashing = false;
+        }
+        if (!asteroid2.hitbox.intersects(asteroid1.hitbox) && !asteroid1.hitbox.intersects(bubble)){
             asteroid1.isCrashing = false;
         }
+        startmillitime = System.currentTimeMillis()-millitime;
     }
 	
    //Pauses or sleeps the computer for the amount specified in milliseconds
@@ -302,6 +331,30 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
         g.drawImage(gavinpic, Gavin.xpos, Gavin.ypos, Gavin.width, Gavin.height, null);
         g.drawImage(asteroidpic, asteroid1.xpos, asteroid1.ypos, asteroid1.width, asteroid1.height, null);
         g.drawImage(asteroidpic, asteroid2.xpos, asteroid2.ypos, asteroid2.width, asteroid2.height, null);
+
+        if(millitime > 0  )
+        {
+            g.setColor(Color.WHITE);
+            g.fillRect( gabe.xpos, gabe.ypos -35, 154, 22);
+            g.setColor(Color.RED);
+            if(startmillitime<1500) {
+                g.fillRect(gabe.xpos + 2, gabe.ypos - 33, (int) startmillitime/10, 18);
+            }
+            else
+            {
+                g.fillRect(gabe.xpos + 2, gabe.ypos - 33, 150, 18);
+            }
+        }
+        if(System.currentTimeMillis()-explosion < 2000)
+        {
+            bubble = new Rectangle(gabe.xpos-20, gabe.ypos-20, gabe.width+40,gabe.height+40);
+            g.setColor(Color.blue);
+            g.drawImage(shield, bubble.x, bubble.y, bubble.width, bubble.height, null);
+        }
+        else
+        {
+            bubble = new Rectangle(4000, 4000, gabe.width+20,gabe.height+20);
+        }
 
 
 //stop drawing things here
@@ -389,8 +442,15 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
 
     @Override
     public void mouseReleased(MouseEvent e) {
-    if(System.currentTimeMillis()-millitime > 5000)
-    {}
+    if(System.currentTimeMillis()-millitime > 1450)
+    {
+        System.out.println("Charge attack");
+        explosion = System.currentTimeMillis();
+
+
+    }
+        millitime = 0;
+
     }
 
     @Override
