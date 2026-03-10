@@ -10,15 +10,16 @@ public class Astronaut {
     public int xbound;
     public int ybound;
     public String name;                //holds the name of the hero
-    public int xpos;                //the x position
-    public int ypos;                //the y position
-    public int dx;                    //the speed of the hero in the x direction
-    public int dy;                    //the speed of the hero in the y direction
+    public double xpos;                //the x position
+    public double ypos;                //the y position
+    public double dx;                    //the speed of the hero in the x direction
+    public double dy;                    //the speed of the hero in the y direction
     public int width;
     public int height;
     public boolean isAlive;//a boolean to denote if the hero is alive or dead.
     public Rectangle hitbox;
     public boolean isCrashing;
+
 
 
     // METHOD DEFINITION SECTION
@@ -38,7 +39,8 @@ public class Astronaut {
         width = 100;
         height = 120;
         isAlive = true;
-        hitbox = new Rectangle(xpos, ypos, width, height);
+        hitbox = new Rectangle((int)xpos, (int) ypos, width, height);
+
  
     } // constructor
 
@@ -57,7 +59,15 @@ public class Astronaut {
         {dy = -dy;}
         xpos = xpos + dx;
         ypos = ypos + dy;
-        hitbox = new Rectangle(xpos, ypos, width, height);
+        if(isAlive == true)
+        {
+            hitbox = new Rectangle((int) xpos, (int) ypos, width, height);
+        }
+        else
+        {
+            hitbox = new Rectangle(1000, 1500, width, height);
+
+        }
 
     }
 }

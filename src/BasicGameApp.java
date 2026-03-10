@@ -4,6 +4,11 @@
 //import java.awt.Canvas;
 
 //Graphics Libraries
+
+
+
+// Can fix following by making position a double, then only casting to int while making drawing/hitbox
+
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -40,7 +45,10 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
    public long millitime;
    public long startmillitime;
    public Rectangle bubble;
-   
+   double scale;
+   double actualspeed;
+   public Asteroid[] chasers;
+
 	public BufferStrategy bufferStrategy;
 	public Image astroPic;
     public Image gabepic;
@@ -56,9 +64,10 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
     private Astronaut gabe;
     private Astronaut Gavin;
     private Asteroid asteroid1;
-    private Asteroid asteroid2;
+   // private Asteroid asteroid2;
     private boolean up, down, left, right;
     public int speed;
+    public int z;
 
 
 
@@ -87,8 +96,16 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
         int randy2 = (int)(Math.random() * 300)+100;
         int randx3 = (int)(Math.random() * 400)+100;
         int randy3 = (int)(Math.random() * 300)+100;
+        chasers = new Asteroid[1000];
+        for (int x=0; x<chasers.length;x++)
+        {
+            chasers[x] = new Asteroid(10,10);
+            chasers[x].width = (int) (Math.random()*100)+50;
+            chasers[x].height = (int) (Math.random()*100)+50;
 
-      setUpGraphics();
+        }
+
+        setUpGraphics();
        
       //variable and objects
       //create (construct) the objects needed for the game and load up 
@@ -103,22 +120,26 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
         astro = new Astronaut(randx3,randy3);
         astro.ypos = 400;
         astro.xpos = 220;
-        speed = 5;
+        speed = 7;
         astro.dx = 0;
         astro.dy = 0;
 
         gabe = new Astronaut(randx,randy);
         Gavin = new Astronaut(randx2,randy2);
-        asteroid1 = new Asteroid ((int)(Math.random()*1000),randy);
-        asteroid2 = new Asteroid((int)(Math.random()*1000), randy);
-        asteroid2.dx  = 3;
+        asteroid1 = new Asteroid ((int)(Math.random()*1000),150);
+      //  asteroid2 = new Asteroid((int)(Math.random()*1000), 2000);
+    //    asteroid2.dx  = 3;
         Gavin.dx = 5;
         Gavin.dy = -5;
-        Gavin.width = 100;
-        Gavin.height = 95;
+        Gavin.width = 60;
+        Gavin.height = 60;
         gabe.width = 100;
         gabe.height = 100;
         bubble = new Rectangle(-2000,1000, 10,10);
+        for(int x = 0; x< chasers.length;x++) {
+            chasers[x].xpos = (Math.random()*1000)+50;
+            chasers[x].ypos = (Math.random()*500)+10;
+        }
 
 
 	}// BasicGameApp()
@@ -155,26 +176,53 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
         else {gabepic = Toolkit.getDefaultToolkit().getImage("Grave.png");}
         if (Gavin.isAlive == true)
         {Gavin.move();}
+        else {gavinpic = Toolkit.getDefaultToolkit().getImage("Grave.png");}
 
-            if (up == true) {
+
+        if (up == true) {
                 astro.ypos -= speed;
             }
             if (down == true) {
                 astro.ypos = astro.ypos + speed;
-                System.out.println("down");
             }
             if (left == true) {
                 astro.xpos = astro.xpos - speed;
-                System.out.println("left");
             }
             if (right == true) {
                 astro.xpos += speed;
             }
 
-        else {gavinpic = Toolkit.getDefaultToolkit().getImage("Grave.png");}
+
+
+        if (astro.isAlive == true) {
+            scale = 4/Math.sqrt(((astro.xpos - Gavin.xpos) * (astro.xpos - Gavin.xpos)) + ((astro.ypos - Gavin.ypos) * (astro.ypos - Gavin.ypos)));
+            Gavin.dy = (astro.ypos - Gavin.ypos)*scale;
+            Gavin.dx = (astro.xpos - Gavin.xpos)*scale;
+            actualspeed = Math.sqrt((((astro.xpos - Gavin.xpos)*scale )* ((astro.xpos - Gavin.xpos)*scale)) + (((astro.ypos - Gavin.ypos)*scale) * ((astro.ypos - Gavin.ypos)*scale)));
+            System.out.println(scale);
+            System.out.println(actualspeed);
+
+        }
+
+        for(int x =0; x< chasers.length; x++)
+        {   chasers[x].startypos = chasers[x].ypos;
+            chasers[x].startxpos = chasers[x].xpos;
+            chasers[x].scale = chasers[x].rand/Math.sqrt(((astro.xpos - chasers[x].xpos) * (astro.xpos - chasers[x].xpos)) + ((astro.ypos - chasers[x].ypos) * (astro.ypos - chasers[x].ypos)));
+            chasers[x].dy = (astro.ypos - chasers[x].ypos)*chasers[x].scale;
+            chasers[x].dx = (astro.xpos - chasers[x].xpos)*chasers[x].scale;
+            actualspeed = Math.sqrt((((astro.xpos - chasers[x].xpos)*chasers[x].scale )* ((astro.xpos - Gavin.xpos)* chasers[x].scale)) + (((astro.ypos - chasers[x].ypos)*chasers[x].scale) * ((astro.ypos - chasers[x].ypos)*chasers[x].scale)));
+        }
+
+
 
         asteroid1.move();
-        asteroid2.move();
+        for (int x = 0; x< chasers.length; x++) {
+
+                chasers[x].move();
+
+
+        }
+     //   asteroid2.move();
         crashing();
 
 	}
@@ -196,13 +244,15 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
             gabe.dy = -gabe.dy;
             asteroid1.isCrashing = true;
         }
-        if (asteroid2.hitbox.intersects(bubble) && asteroid2.isCrashing == false){
+       /* if (asteroid2.hitbox.intersects(bubble) && asteroid2.isCrashing == false){
             asteroid2.dx = -asteroid2.dx;
             asteroid2.dy = -asteroid2.dy;
             gabe.dx = -gabe.dx;
             gabe.dy = -gabe.dy;
             asteroid2.isCrashing = true;
         }
+        */
+
 
         if (Gavin.hitbox.intersects(gabe.hitbox) && Gavin.isCrashing == false){
             Gavin.dx = -Gavin.dx;
@@ -212,10 +262,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
             Gavin.isCrashing = true;
         }
         if (Gavin.hitbox.intersects(astro.hitbox) && Gavin.isCrashing == false){
-            Gavin.dx = -Gavin.dx;
-            Gavin.dy = -Gavin.dy;
             astro.dx = -astro.dx;
             astro.dy = -astro.dy;
+     //   astro.isAlive = false;
         Gavin.isCrashing = true;
         }
 
@@ -243,7 +292,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
         gabe.isAlive = false;
 
     }
-        if (asteroid2.hitbox.intersects(Gavin.hitbox)){
+       /* if (asteroid2.hitbox.intersects(Gavin.hitbox)){
             Gavin.isAlive = false;
         }
         if (asteroid2.hitbox.intersects(astro.hitbox)){
@@ -269,6 +318,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
         if (!asteroid2.hitbox.intersects(asteroid1.hitbox) && !asteroid1.hitbox.intersects(bubble)){
             asteroid1.isCrashing = false;
         }
+
+        */
         startmillitime = System.currentTimeMillis()-millitime;
     }
 	
@@ -326,28 +377,34 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
 
       //draw the image of the astronaut
         g.drawImage(backgroundpic, 0, 0, 1000, 700, null);
-		g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
-        g.drawImage(gabepic, gabe.xpos, gabe.ypos, gabe.width, gabe.height, null);
-        g.drawImage(gavinpic, Gavin.xpos, Gavin.ypos, Gavin.width, Gavin.height, null);
-        g.drawImage(asteroidpic, asteroid1.xpos, asteroid1.ypos, asteroid1.width, asteroid1.height, null);
-        g.drawImage(asteroidpic, asteroid2.xpos, asteroid2.ypos, asteroid2.width, asteroid2.height, null);
+		g.drawImage(astroPic, (int) astro.xpos, (int) astro.ypos, astro.width, astro.height, null);
+        g.drawImage(gabepic, (int) gabe.xpos, (int) gabe.ypos, gabe.width, gabe.height, null);
+        g.drawImage(gavinpic, (int) Gavin.xpos, (int) Gavin.ypos, Gavin.width, Gavin.height, null);
+        g.drawImage(asteroidpic, (int) asteroid1.xpos, (int) asteroid1.ypos, asteroid1.width, asteroid1.height, null);
+       // g.drawImage(asteroidpic, asteroid2.xpos, asteroid2.ypos, asteroid2.width, asteroid2.height, null);
+        g.drawRect((int) astro.hitbox.x, (int) astro.hitbox.y, astro.hitbox.width, astro.hitbox.height);
+        for(int x = 0; x<chasers.length; x++)
+        {
+            g.drawImage(asteroidpic, (int) chasers[x].xpos, (int) chasers[x].ypos, chasers[x].width, chasers[x].height, null);
+            g.drawRect((int) chasers[x].xpos, (int) chasers[x].ypos,  chasers[x].width,  chasers[x].height);
+        }
 
         if(millitime > 0  )
         {
             g.setColor(Color.WHITE);
-            g.fillRect( gabe.xpos, gabe.ypos -35, 154, 22);
+            g.fillRect( (int) gabe.xpos,  (int) gabe.ypos -35, 154, 22);
             g.setColor(Color.RED);
             if(startmillitime<1500) {
-                g.fillRect(gabe.xpos + 2, gabe.ypos - 33, (int) startmillitime/10, 18);
+                g.fillRect( (int) gabe.xpos + 2,  (int)gabe.ypos - 33, (int) startmillitime/10, 18);
             }
             else
             {
-                g.fillRect(gabe.xpos + 2, gabe.ypos - 33, 150, 18);
+                g.fillRect( (int) gabe.xpos + 2,  (int) gabe.ypos - 33, 150, 18);
             }
         }
         if(System.currentTimeMillis()-explosion < 2000)
         {
-            bubble = new Rectangle(gabe.xpos-20, gabe.ypos-20, gabe.width+40,gabe.height+40);
+            bubble = new Rectangle( (int) gabe.xpos-20,  (int) gabe.ypos-20, gabe.width+40,gabe.height+40);
             g.setColor(Color.blue);
             g.drawImage(shield, bubble.x, bubble.y, bubble.width, bubble.height, null);
         }
@@ -444,7 +501,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
     public void mouseReleased(MouseEvent e) {
     if(System.currentTimeMillis()-millitime > 1450)
     {
-        System.out.println("Charge attack");
         explosion = System.currentTimeMillis();
 
 
