@@ -96,7 +96,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
         int randy2 = (int)(Math.random() * 300)+100;
         int randx3 = (int)(Math.random() * 400)+100;
         int randy3 = (int)(Math.random() * 300)+100;
-        chasers = new Asteroid[1000];
+        chasers = new Asteroid[10000];
         for (int x=0; x<chasers.length;x++)
         {
             chasers[x] = new Asteroid(10,10);
@@ -199,8 +199,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
             Gavin.dy = (astro.ypos - Gavin.ypos)*scale;
             Gavin.dx = (astro.xpos - Gavin.xpos)*scale;
             actualspeed = Math.sqrt((((astro.xpos - Gavin.xpos)*scale )* ((astro.xpos - Gavin.xpos)*scale)) + (((astro.ypos - Gavin.ypos)*scale) * ((astro.ypos - Gavin.ypos)*scale)));
-            System.out.println(scale);
-            System.out.println(actualspeed);
+
 
         }
 
@@ -244,15 +243,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
             gabe.dy = -gabe.dy;
             asteroid1.isCrashing = true;
         }
-       /* if (asteroid2.hitbox.intersects(bubble) && asteroid2.isCrashing == false){
-            asteroid2.dx = -asteroid2.dx;
-            asteroid2.dy = -asteroid2.dy;
-            gabe.dx = -gabe.dx;
-            gabe.dy = -gabe.dy;
-            asteroid2.isCrashing = true;
-        }
-        */
-
 
         if (Gavin.hitbox.intersects(gabe.hitbox) && Gavin.isCrashing == false){
             Gavin.dx = -Gavin.dx;
@@ -292,35 +282,39 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
         gabe.isAlive = false;
 
     }
-       /* if (asteroid2.hitbox.intersects(Gavin.hitbox)){
-            Gavin.isAlive = false;
-        }
-        if (asteroid2.hitbox.intersects(astro.hitbox)){
-            astro.isAlive = false;
-        }
-        if (asteroid2.hitbox.intersects(gabe.hitbox)){
-            gabe.isAlive = false;
-        }
-        if (asteroid2.hitbox.intersects(asteroid1.hitbox) && asteroid1.isCrashing ==false){
-            asteroid2.height += 15;
-            asteroid2.width += 15;
-            asteroid1.height += 15;
-            asteroid1.width += 15;
-            asteroid1.dx = -asteroid1.dx;
-            asteroid1.dy = -asteroid1.dy;
-            asteroid2.dx = -asteroid2.dx;
-            asteroid2.dy = -asteroid2.dy;
-            asteroid1.isCrashing = true;
-        }
-        if (!asteroid2.hitbox.intersects(asteroid1.hitbox) && !asteroid2.hitbox.intersects(bubble)){
-            asteroid2.isCrashing = false;
-        }
-        if (!asteroid2.hitbox.intersects(asteroid1.hitbox) && !asteroid1.hitbox.intersects(bubble)){
-            asteroid1.isCrashing = false;
-        }
 
-        */
         startmillitime = System.currentTimeMillis()-millitime;
+        for(int e = 0; e< chasers.length; e++)
+        {
+            if ( chasers[e].hitbox.intersects(astro.hitbox) && chasers[e].isCrashing == false)
+            {
+                System.out.println("Chaser" + " hit niamh" +  (Math.random()*100));
+                chasers[e].isCrashing = true;
+            }
+        }
+        for(int e = 0; e< chasers.length; e++)
+        {
+            if ( chasers[e].hitbox.intersects(gabe.hitbox) && chasers[e].isCrashing == false)
+            {
+        //        System.out.println("Chaser" + " hit gabe");
+                chasers[e].isCrashing = true;
+            }
+        }
+        for(int e = 0; e< chasers.length; e++)
+        {
+            if ( chasers[e].hitbox.intersects(Gavin.hitbox) && chasers[e].isCrashing == false)
+            {
+       //         System.out.println("Chaser" + " hit gavin");
+                chasers[e].isCrashing = true;
+            }
+        }
+        for(int e = 0; e< chasers.length; e++)
+        {
+            if ( !chasers[e].hitbox.intersects(astro.hitbox) && !chasers[e].hitbox.intersects(Gavin.hitbox) && !chasers[e].hitbox.intersects(gabe.hitbox))
+            {
+                chasers[e].isCrashing = false;
+            }
+        }
     }
 	
    //Pauses or sleeps the computer for the amount specified in milliseconds
@@ -364,8 +358,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
       canvas.createBufferStrategy(2);
       bufferStrategy = canvas.getBufferStrategy();
       canvas.requestFocus();
-      System.out.println("DONE graphic setup");
-   
+
    }
 
 
@@ -431,7 +424,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println(e.getKeyCode());
         if (e.getKeyCode() == 87) {
             up = true;
         }

@@ -59,15 +59,8 @@ public class Astronaut {
         {dy = -dy;}
         xpos = xpos + dx;
         ypos = ypos + dy;
-        if(isAlive == true)
-        {
-            hitbox = new Rectangle((int) xpos, (int) ypos, width, height);
-        }
-        else
-        {
-            hitbox = new Rectangle(1000, 1500, width, height);
+        hitbox = new Rectangle((int) xpos, (int) ypos, width, height);
 
-        }
 
     }
 }

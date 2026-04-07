@@ -45,7 +45,7 @@ public class Asteroid {
         height = 100;
         isAlive = true;
         hitbox = new Rectangle ((int)xpos, (int) ypos, width, height);
-        rand = (Math.random()*5)+1;
+        rand = (Math.random()*4)+1;
         speedxrand = (Math.random()*200)-100;
         speedyrand = (Math.random()*200)-100;
 
